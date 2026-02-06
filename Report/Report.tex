@@ -7,6 +7,7 @@
 \usepackage{booktabs}
 \usepackage{geometry}
 \geometry{margin=1in}
+\hyphenpenalty = 10000
 
 \title{Bayesian Image Denoising Using Markov Random Field Priors}
 \author{
@@ -75,13 +76,14 @@ For each prior, parameters were tuned to minimize the RRMSE. The optimal paramet
 \toprule
 \textbf{Prior} & $\alpha^*$ & $\gamma^*$ & \textbf{RRMSE} \\
 \midrule
-Quadratic & $\alpha_q^*$ & -- & $\text{RRMSE}_q$ \\
-Huber & $\alpha_h^*$ & $\gamma_h^*$ & $\text{RRMSE}_h$ \\
-Discontinuity-adaptive & $\alpha_d^*$ & $\gamma_d^*$ & $\text{RRMSE}_d$ \\
+Quadratic & 0.027815 & -- & 0.281216 \\
+Huber & 0.874220 & 0.003477 & 0.236048 \\
+Discontinuity-adaptive & 0.942631 & 0.002522 & 0.236876 \\
 \bottomrule
 \end{tabular}
 \caption{Optimal parameters and corresponding RRMSE values}
 \end{table}
+
 
 \subsection*{Evidence of Optimality}
 To verify optimality, each parameter was perturbed by $\pm20\%$ while keeping the remaining parameters fixed.
@@ -97,32 +99,62 @@ RRMSE($0.8\alpha^*$) &
 RRMSE($1.2\gamma^*$) &
 RRMSE($0.8\gamma^*$) \\
 \midrule
-Quadratic & $\text{RRMSE}_q$ & $>$ & $>$ & -- & -- \\
-Huber & $\text{RRMSE}_h$ & $>$ & $>$ & $>$ & $>$ \\
-Discontinuity & $\text{RRMSE}_d$ & $>$ & $>$ & $>$ & $>$ \\
+Quadratic
+& 0.281216
+& 0.281583
+& 0.281574
+& --
+& -- \\
+
+Huber
+& 0.236048
+& 0.246839
+& 0.246710
+& 0.236443
+& 0.236869 \\
+
+Discontinuity-adaptive
+& 0.236876
+& 0.257748
+& 0.250678
+& 0.237325
+& 0.237531 \\
 \bottomrule
 \end{tabular}
-\caption{RRMSE comparison for $\pm20\%$ parameter perturbations}
+\caption{RRMSE values for $\pm20\%$ perturbations of optimal parameters}
 \end{table}
+
 
 \textbf{Justification:}  
 In all cases, perturbing the optimal parameters resulted in higher RRMSE values. This confirms that the reported parameter values correspond to local minima of the reconstruction error and therefore represent optimal tuning.
 
 \subsection*{Denoised Image Results}
 
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=\textwidth]{phantom_results_placeholder.png}
-% \caption{(i) Noiseless image, (ii) Noisy image, (iii) Denoised image using quadratic prior, (iv) Denoised image using Huber prior, (v) Denoised image using discontinuity-adaptive prior. All images are displayed using the same colormap.}
-% \end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Noiseless_vs_Noisy_Denoised_Q1.png}
+\caption{(i) Noiseless image, (ii) Noisy image, (iii) Denoised image using quadratic prior, (iv) Denoised image using Huber prior, (v) Denoised image using discontinuity-adaptive prior. All images are displayed using the same colormap.}
+\end{figure}
 
 \subsection*{Objective Function Convergence}
 
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=0.8\textwidth]{objective_convergence_placeholder.png}
-% \caption{Objective function value versus iteration for quadratic, Huber, and discontinuity-adaptive priors using optimal parameters.}
-% \end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{quadratic_prior_Convergence_curve_Q1.png}
+\caption{Objective function value versus iteration for quadratic prior using optimal parameters.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{huber_prior_Convergence_curve_Q1.png}
+\caption{Objective function value versus iteration for Huber prior using optimal parameters.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Discontinuity_prior_Convergence_curve_Q1.png}
+\caption{Objective function value versus iteration for discontinuity-adaptive prior using optimal parameters.}
+\end{figure}
 
 \textbf{Justification:}  
 The objective function increases monotonically with iteration for all three priors, confirming correct implementation of gradient ascent with adaptive step size and convergence to a MAP estimate.
@@ -130,13 +162,160 @@ The objective function increases monotonically with iteration for all three prio
 \section*{2. Bayesian Denoising of Brain MRI}
 The same denoising framework was applied to the brain MRI image. Similar trends were observed: the quadratic prior produced excessive smoothing, while the Huber and discontinuity-adaptive priors preserved anatomical edges more effectively.
 
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=\textwidth]{brain_results_placeholder.png}
-% \caption{Brain MRI denoising results and objective-function convergence plots.}
-% \end{figure}
+\begin{table}[H]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Prior} & $\alpha^*$ & $\gamma^*$ & \textbf{RRMSE} \\
+\midrule
+Quadratic & 0.038774 & -- & 0.122346 \\
+Huber & 0.465101 & 0.012349 & 0.113304 \\
+Discontinuity-adaptive & 0.514589 & 0.010655 & 0.113690 \\
+\bottomrule
+\end{tabular}
+\caption{Optimal parameters and corresponding RRMSE values}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Prior} &
+RRMSE($\alpha^*,\gamma^*$) &
+RRMSE($1.2\alpha^*$) &
+RRMSE($0.8\alpha^*$) &
+RRMSE($1.2\gamma^*$) &
+RRMSE($0.8\gamma^*$) \\
+\midrule
+Quadratic
+& 0.122346
+& 0.122888
+& 0.122602
+& --
+& -- \\
+
+Huber
+& 0.113304
+& 0.116376
+& 0.115039
+& 0.114111
+& 0.113808 \\
+
+Discontinuity-adaptive
+& 0.113690
+& 0.115537
+& 0.116700
+& 0.113792
+& 0.114593 \\
+\bottomrule
+\end{tabular}
+\caption{RRMSE values for $\pm20\%$ perturbations of optimal parameters}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Noiseless_vs_Noisy_Denoised_Q2.png}
+\caption{(i) Noiseless image, (ii) Noisy image, (iii) Denoised image using quadratic prior, (iv) Denoised image using Huber prior, (v) Denoised image using discontinuity-adaptive prior. All images are displayed using the same colormap.}
+\end{figure}
+
+\subsection*{Objective Function Convergence}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{quadratic_prior_Convergence_curve_Q2.png}
+\caption{Objective function value versus iteration for quadratic prior using optimal parameters.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{huber_prior_Convergence_curve_Q2.png}
+\caption{Objective function value versus iteration for Huber prior using optimal parameters.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Discontinuity_prior_Convergence_curve_Q2.png}
+\caption{Objective function value versus iteration for discontinuity-adaptive prior using optimal parameters.}
+\end{figure}
 
 \section*{3. Bayesian Denoising of RGB Microscopy Image}
+The same Bayesian denoising framework was applied to a vector-valued RGB microscopy image. The denoising was performed using three vector-valued priors corresponding to different regularization strategies. Performance was evaluated quantitatively using RRMSE and qualitatively using visual inspection. Unlike the grayscale images in Part 2, this experiment required vector-valued denoising, where regularization was applied jointly across the RGB channels using vector-valued MRF priors.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Prior} & $\alpha^*$ & $\gamma^*$ & \textbf{RRMSE} \\
+\midrule
+Quadratic & 0.038774 & -- & 0.122346 \\
+Huber & 0.465101 & 0.012349 & 0.113304 \\
+Discontinuity-adaptive & 0.514589 & 0.010655 & 0.113690 \\
+\bottomrule
+\end{tabular}
+\caption{Optimal parameters and corresponding RRMSE values}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Prior} &
+RRMSE($\alpha^*,\gamma^*$) &
+RRMSE($1.2\alpha^*$) &
+RRMSE($0.8\alpha^*$) &
+RRMSE($1.2\gamma^*$) &
+RRMSE($0.8\gamma^*$) \\
+\midrule
+Quadratic
+& 0.122346
+& 0.122888
+& 0.122602
+& --
+& -- \\
+
+Huber
+& 0.113304
+& 0.116376
+& 0.115039
+& 0.114111
+& 0.113808 \\
+
+Discontinuity-adaptive
+& 0.113690
+& 0.115537
+& 0.116700
+& 0.113792
+& 0.114593 \\
+\bottomrule
+\end{tabular}
+\caption{RRMSE values for $\pm20\%$ perturbations of optimal parameters}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Noiseless_vs_Noisy_Denoised_Q2.png}
+\caption{(i) Noiseless image, (ii) Noisy image, (iii) Denoised image using quadratic prior, (iv) Denoised image using Huber prior, (v) Denoised image using discontinuity-adaptive prior. All images are displayed using the same colormap.}
+\end{figure}
+
+\subsection*{Objective Function Convergence}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{quadratic_prior_Convergence_curve_Q2.png}
+\caption{Objective function value versus iteration for quadratic prior using optimal parameters.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{huber_prior_Convergence_curve_Q2.png}
+\caption{Objective function value versus iteration for Huber prior using optimal parameters.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Discontinuity_prior_Convergence_curve_Q2.png}
+\caption{Objective function value versus iteration for discontinuity-adaptive prior using optimal parameters.}
+\end{figure}
 
 \subsection*{Edge Preservation Analysis}
 Among the three vector-valued priors:
