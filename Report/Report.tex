@@ -76,17 +76,15 @@ For each prior, parameters were tuned to minimize the RRMSE. The optimal paramet
 \toprule
 \textbf{Prior} & $\alpha^*$ & $\gamma^*$ & \textbf{RRMSE} \\
 \midrule
-Quadratic & 0.027815 & -- & 0.281216 \\
-Huber & 0.874220 & 0.003477 & 0.236048 \\
-Discontinuity-adaptive & 0.942631 & 0.002522 & 0.236876 \\
+Quadratic & 0.059752 & -- & 0.280725 \\
+Huber & 0.988762 & 0.031240 & 0.239420 \\
+Discontinuity-adaptive & 0.999784 & 0.038758 & 0.243603 \\
 \bottomrule
 \end{tabular}
 \caption{Optimal parameters and corresponding RRMSE values}
 \end{table}
 
 
-\subsection*{Evidence of Optimality}
-To verify optimality, each parameter was perturbed by $\pm20\%$ while keeping the remaining parameters fixed.
 
 \begin{table}[H]
 \centering
@@ -100,25 +98,25 @@ RRMSE($1.2\gamma^*$) &
 RRMSE($0.8\gamma^*$) \\
 \midrule
 Quadratic
-& 0.281216
-& 0.281583
-& 0.281574
+& 0.280725
+& 0.281167
+& 0.281199
 & --
 & -- \\
 
 Huber
-& 0.236048
-& 0.246839
-& 0.246710
-& 0.236443
-& 0.236869 \\
+& 0.239420
+& 0.239421
+& 0.241363
+& 0.239898
+& 0.240137 \\
 
 Discontinuity-adaptive
-& 0.236876
-& 0.257748
-& 0.250678
-& 0.237325
-& 0.237531 \\
+& 0.243603
+& 0.243088
+& 0.246478
+& 0.243956
+& 0.244195 \\
 \bottomrule
 \end{tabular}
 \caption{RRMSE values for $\pm20\%$ perturbations of optimal parameters}
@@ -168,13 +166,14 @@ The same denoising framework was applied to the brain MRI image. Similar trends 
 \toprule
 \textbf{Prior} & $\alpha^*$ & $\gamma^*$ & \textbf{RRMSE} \\
 \midrule
-Quadratic & 0.038774 & -- & 0.122346 \\
-Huber & 0.465101 & 0.012349 & 0.113304 \\
-Discontinuity-adaptive & 0.514589 & 0.010655 & 0.113690 \\
+Quadratic & 0.079704 & -- & 0.121299 \\
+Huber & 0.695953 & 0.030194 & 0.113147 \\
+Discontinuity-adaptive & 0.998209 & 0.023875 & 0.113360 \\
 \bottomrule
 \end{tabular}
 \caption{Optimal parameters and corresponding RRMSE values}
 \end{table}
+
 
 \begin{table}[H]
 \centering
@@ -188,29 +187,30 @@ RRMSE($1.2\gamma^*$) &
 RRMSE($0.8\gamma^*$) \\
 \midrule
 Quadratic
-& 0.122346
-& 0.122888
-& 0.122602
+& 0.121299
+& 0.121765
+& 0.121873
 & --
 & -- \\
 
 Huber
-& 0.113304
-& 0.116376
-& 0.115039
-& 0.114111
-& 0.113808 \\
+& 0.113147
+& 0.113924
+& 0.114345
+& 0.113601
+& 0.114006 \\
 
 Discontinuity-adaptive
-& 0.113690
-& 0.115537
-& 0.116700
-& 0.113792
-& 0.114593 \\
+& 0.113360
+& 0.114165
+& 0.114869
+& 0.113671
+& 0.114048 \\
 \bottomrule
 \end{tabular}
 \caption{RRMSE values for $\pm20\%$ perturbations of optimal parameters}
 \end{table}
+
 
 \begin{figure}[H]
 \centering
