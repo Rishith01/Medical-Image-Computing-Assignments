@@ -239,100 +239,57 @@ Discontinuity-adaptive
 \end{figure}
 
 \section*{3. Bayesian Denoising of RGB Microscopy Image}
-The same Bayesian denoising framework was applied to a vector-valued RGB microscopy image. The denoising was performed using three vector-valued priors corresponding to different regularization strategies. Performance was evaluated quantitatively using RRMSE and qualitatively using visual inspection. Unlike the grayscale images in Part 2, this experiment required vector-valued denoising, where regularization was applied jointly across the RGB channels using vector-valued MRF priors.
 
-\begin{table}[H]
-\centering
-\begin{tabular}{lccc}
-\toprule
-\textbf{Prior} & $\alpha^*$ & $\gamma^*$ & \textbf{RRMSE} \\
-\midrule
-Quadratic & 0.038774 & -- & 0.122346 \\
-Huber & 0.465101 & 0.012349 & 0.113304 \\
-Discontinuity-adaptive & 0.514589 & 0.010655 & 0.113690 \\
-\bottomrule
-\end{tabular}
-\caption{Optimal parameters and corresponding RRMSE values}
-\end{table}
+In this experiment, the Bayesian image denoising framework was extended to a vector-valued RGB microscopy image provided in the \texttt{data} folder. The noise was assumed to follow a Gaussian distribution as an approximation. Unlike Part~2, where grayscale images were considered, this task required joint denoising of the three RGB channels using vector-valued Markov Random Field (MRF) priors.
 
-\begin{table}[H]
-\centering
-\begin{tabular}{lccccc}
-\toprule
-\textbf{Prior} &
-RRMSE($\alpha^*,\gamma^*$) &
-RRMSE($1.2\alpha^*$) &
-RRMSE($0.8\alpha^*$) &
-RRMSE($1.2\gamma^*$) &
-RRMSE($0.8\gamma^*$) \\
-\midrule
-Quadratic
-& 0.122346
-& 0.122888
-& 0.122602
-& --
-& -- \\
+Three different vector-valued MRF prior functions were investigated:
 
-Huber
-& 0.113304
-& 0.116376
-& 0.115039
-& 0.114111
-& 0.113808 \\
-
-Discontinuity-adaptive
-& 0.113690
-& 0.115537
-& 0.116700
-& 0.113792
-& 0.114593 \\
-\bottomrule
-\end{tabular}
-\caption{RRMSE values for $\pm20\%$ perturbations of optimal parameters}
-\end{table}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{Noiseless_vs_Noisy_Denoised_Q2.png}
-\caption{(i) Noiseless image, (ii) Noisy image, (iii) Denoised image using quadratic prior, (iv) Denoised image using Huber prior, (v) Denoised image using discontinuity-adaptive prior. All images are displayed using the same colormap.}
-\end{figure}
-
-\subsection*{Objective Function Convergence}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{quadratic_prior_Convergence_curve_Q2.png}
-\caption{Objective function value versus iteration for quadratic prior using optimal parameters.}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{huber_prior_Convergence_curve_Q2.png}
-\caption{Objective function value versus iteration for Huber prior using optimal parameters.}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{Discontinuity_prior_Convergence_curve_Q2.png}
-\caption{Objective function value versus iteration for discontinuity-adaptive prior using optimal parameters.}
-\end{figure}
-
-\subsection*{Edge Preservation Analysis}
-Among the three vector-valued priors:
 \begin{itemize}
-\item The squared $\ell_2$ prior excessively smooths edges.
-\item The $\ell_2$ norm prior preserves edges better by reducing penalization of large gradients.
-\item The Huber-regularized $\ell_1$ prior provides the best edge preservation by combining robustness to outliers with smoothness in homogeneous regions.
+\item \textbf{Prior A (Squared-$\ell_2$ prior):} the penalty between two neighboring pixels is the squared $\ell_2$ norm of their vector difference.
+\item \textbf{Prior B ($\ell_2$ prior):} the penalty between two neighboring pixels is the $\ell_2$ norm of their vector difference.
+\item \textbf{Prior C (Huber-regularized $\ell_1$ prior):} the penalty between two neighboring pixels is the Huber-regularized $\ell_1$ norm of their vector difference.
 \end{itemize}
 
-\textbf{Justification:}  
-Edge preservation arises from non-quadratic penalties that limit smoothing across high-contrast boundaries while still suppressing noise in flat regions.
+Regularization was applied jointly across all RGB channels. For each prior, the optimal regularization parameters were determined by minimizing the relative root mean square error (RRMSE) with respect to the noiseless reference image.
 
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=\textwidth]{rgb_results_placeholder.png}
-% \caption{RGB microscopy denoising results using three different priors.}
-% \end{figure}
+\subsection*{(a) Visual Denoising Results and Edge Preservation}
+
+Figure~\ref{fig:rgb_results} shows the five required images, displayed using the \textbf{same jet colormap} and visualizing the magnitude of the RGB pixel values at each location:
+(i) noiseless image,
+(ii) noisy image,
+(iii) denoised image using Prior~A,
+(iv) denoised image using Prior~B,
+(v) denoised image using Prior~C.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{all_image_q3.png}
+\caption{(i) Noiseless RGB microscopy image, (ii) noisy image, (iii) denoised image using squared-$\ell_2$ prior (A), (iv) denoised image using $\ell_2$ prior (B), and (v) denoised image using Huber-$\ell_1$ prior (C). All images are shown using the same jet colormap.}
+\label{fig:rgb_results}
+\end{figure}
+
+\textbf{Edge Preservation Observation:}  
+Edge preservation is most clearly observed in cases \textbf{B} and \textbf{C}, with the strongest preservation occurring for \textbf{Prior~C (Huber-$\ell_1$)}.
+
+\textbf{Explanation:}  
+The squared-$\ell_2$ prior (A) penalizes large gradients heavily, leading to excessive smoothing across edges.  
+The $\ell_2$ prior (B) reduces the penalty on large vector differences, allowing sharper transitions to be preserved.  
+The Huber-regularized $\ell_1$ prior (C) behaves quadratically for small gradients and linearly for large gradients, which limits smoothing across high-contrast boundaries while still suppressing noise in homogeneous regions. This results in superior edge preservation.
+
+\subsection*{(b) Objective Function Convergence}
+
+Figure~\ref{fig:convergence} shows the objective function value versus iteration for the three denoising cases using their respective optimal parameters.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{convergence.png}
+\caption{Objective function value versus iteration for squared-$\ell_2$ prior (A) , $\ell_2$ prior (B) and  Huber-$\ell_1$ prior (C).}
+\label{fig:convergence}
+\end{figure}
+
+In all three cases, the objective function increases monotonically and converges to a stable value, indicating successful optimization.
+
 
 \section*{4. Dictionary Learning on Image Patches and Image Denoising}
 
